@@ -1,6 +1,13 @@
 'use strict';
 
 const MY_API_TOKEN = config.MY_API_TOKEN;
+const GENRE = [
+  {name: "popular", link:"/discover/movie?sort_by=popularity.desc"},
+  {name:"highest rated", link:"/discover/movie/?certification_country=US&certification=R&sort_by=vote_average.desc"},
+  {name:"drama",link:"/discover/movie?with_genres=18&primary_release_year=2014"}
+];
+  
+
 
 const API_URL =
   'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=' +
@@ -42,15 +49,27 @@ async function getMovies(url) {
   }
   else{
     showMovies(data.results);
-    console.log(data.results)
+    // console.log(data.results)
   }
 }
 
 function showMovies(movies) {
   main.innerHTML = '';
 
+  for (let i = 0; i < GENRE.length; i++) {
+    // console.log(GENRE[i].name);
+    const createEL = document.createElement('div');
+    createEL.classList.add('filter');
+    createEL.innerHTML = `<button class="filter-button">${GENRE[i].name}</button>`;
+    filters.appendChild(createEL);
+  }
+
+
+
   movies.forEach((movie) => {
     const { title, poster_path, vote_average, vote_count, popularity, overview, release_date, adult} = movie;
+
+    
 
     const createEL = document.createElement('div');
     createEL.classList.add('movie');
@@ -77,6 +96,9 @@ function showMovies(movies) {
 
     main.appendChild(createEL);
   });
+  
+ 
+
 }
 
 function getOverviewRating(rating) {
