@@ -1,16 +1,10 @@
 'use strict';
 
 const MY_API_TOKEN = config.MY_API_TOKEN;
-const GENRE = [
-  {name: "popular", link:"/discover/movie?sort_by=popularity.desc"},
-  {name:"highest rated", link:"/discover/movie/?certification_country=US&certification=R&sort_by=vote_average.desc"},
-  {name:"drama",link:"/discover/movie?with_genres=18&primary_release_year=2014"}
-];
-  
 
-
+let UNIVERSAL_LINK = '/discover/movie?sort_by=popularity.desc';
 const API_URL =
-  'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=' +
+  'https://api.themoviedb.org/3'+ UNIVERSAL_LINK +'&api_key=' +
   MY_API_TOKEN +
   '&page=1';
 const IMG_PATH = 'https://image.tmdb.org/t/p/w1280';
@@ -22,10 +16,25 @@ const form = document.getElementById('search_form');
 const search = document.getElementById('search');
 const logo = document.querySelector('.logo');
 
+const GENRE = [
+  {name: "popular", link:'/discover/movie?sort_by=popularity.desc'},
+  {name:"highest rated", link:'/discover/movie/?certification_country=US&certification=R&sort_by=vote_average.desc'},
+  {name:"drama",link:'/discover/movie?with_genres=18&primary_release_year=2014'}
+];
+
 logo.addEventListener('click', () => {
   main.innerHTML = '';
   getMovies(API_URL);
 });
+
+function filterButtonHandler(link){
+  // UNIVERSAL_LINK = link;
+  console.log(link);
+ 
+  // getMovies(API_URL);
+  // showMovies(movies);
+}
+
 
 // Get initial Movies
 getMovies(API_URL);
@@ -34,8 +43,8 @@ async function getMovies(url) {
   const res = await fetch(url);
   const data = await res.json();
 
-  // console.log(data.results.length);
-
+  console.log(data.results);
+  console.log(UNIVERSAL_LINK);
 
   if (data.results.length === 0) {
     main.innerHTML = '';
@@ -53,18 +62,24 @@ async function getMovies(url) {
   }
 }
 
+
+
+function showFilters(){
+
+for (let i = 0; i < GENRE.length; i++) {
+  // console.log(GENRE[i].name);
+  const createEL = document.createElement('div');
+  createEL.classList.add('filter');
+  createEL.innerHTML = `<button class="filter-button" onclick="filterButtonHandler(${GENRE[i].link})">${GENRE[i].name}</button>`;
+  filters.appendChild(createEL);
+}
+}
+
+showFilters();
+
+
 function showMovies(movies) {
   main.innerHTML = '';
-
-  for (let i = 0; i < GENRE.length; i++) {
-    // console.log(GENRE[i].name);
-    const createEL = document.createElement('div');
-    createEL.classList.add('filter');
-    createEL.innerHTML = `<button class="filter-button">${GENRE[i].name}</button>`;
-    filters.appendChild(createEL);
-  }
-
-
 
   movies.forEach((movie) => {
     const { title, poster_path, vote_average, vote_count, popularity, overview, release_date, adult} = movie;
