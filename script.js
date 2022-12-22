@@ -4,7 +4,7 @@ const MY_API_TOKEN = config.MY_API_TOKEN;
 
 let UNIVERSAL_LINK = '/discover/movie?sort_by=popularity.desc';
 const API_URL =
-  'https://api.themoviedb.org/3'+ UNIVERSAL_LINK +'&api_key=' +
+  'https://api.themoviedb.org/3' + UNIVERSAL_LINK + '&api_key=' +
   MY_API_TOKEN +
   '&page=1';
 const IMG_PATH = 'https://image.tmdb.org/t/p/w1280';
@@ -17,9 +17,9 @@ const search = document.getElementById('search');
 const logo = document.querySelector('.logo');
 
 const GENRE = [
-  {name: "popular", link:'/discover/movie?sort_by=popularity.desc'},
-  {name:"highest rated", link:'/discover/movie/?certification_country=US&certification=R&sort_by=vote_average.desc'},
-  {name:"drama",link:'/discover/movie?with_genres=18&primary_release_year=2014'}
+  { name: "popular", link: '/discover/movie?sort_by=popularity.desc' },
+  { name: "highest rated", link: '/discover/movie/?certification_country=US&certification=R&sort_by=vote_average.desc' },
+  { name: "drama", link: '/discover/movie?with_genres=18&primary_release_year=2014' }
 ];
 
 logo.addEventListener('click', () => {
@@ -27,10 +27,10 @@ logo.addEventListener('click', () => {
   getMovies(API_URL);
 });
 
-function filterButtonHandler(link){
+function filterButtonHandler(link) {
   // UNIVERSAL_LINK = link;
   console.log(link);
- 
+
   // getMovies(API_URL);
   // showMovies(movies);
 }
@@ -52,11 +52,11 @@ async function getMovies(url) {
     const createErrorEL = document.createElement('div');
     createErrorEL.classList.add('errorHandle');
 
-    createErrorEL.innerHTML = `<h1>Oh no 🙅🏻 ! There is no such movie exists , please return to Home page or search anything relevant</h1>`;
+    createErrorEL.innerHTML = `<h1>Oh no 🙅🏻 ! There is no such movie exists , please return to Home page or search anything relevant.</h1>`;
 
     main.appendChild(createErrorEL);
   }
-  else{
+  else {
     showMovies(data.results);
     // console.log(data.results)
   }
@@ -64,15 +64,15 @@ async function getMovies(url) {
 
 
 
-function showFilters(){
+function showFilters() {
 
-for (let i = 0; i < GENRE.length; i++) {
-  // console.log(GENRE[i].name);
-  const createEL = document.createElement('div');
-  createEL.classList.add('filter');
-  createEL.innerHTML = `<button class="filter-button" onclick="filterButtonHandler(${GENRE[i].link})">${GENRE[i].name}</button>`;
-  filters.appendChild(createEL);
-}
+  for (let i = 0; i < GENRE.length; i++) {
+    // console.log(GENRE[i].name);
+    const createEL = document.createElement('div');
+    createEL.classList.add('filter');
+    createEL.innerHTML = `<button class="filter-button" onclick="filterButtonHandler(${GENRE[i].link})">${GENRE[i].name}</button>`;
+    filters.appendChild(createEL);
+  }
 }
 
 showFilters();
@@ -82,9 +82,9 @@ function showMovies(movies) {
   main.innerHTML = '';
 
   movies.forEach((movie) => {
-    const { title, poster_path, vote_average, vote_count, popularity, overview, release_date, adult} = movie;
+    const { title, poster_path, vote_average, vote_count, popularity, overview, release_date, adult } = movie;
 
-    
+
 
     const createEL = document.createElement('div');
     createEL.classList.add('movie');
@@ -94,8 +94,8 @@ function showMovies(movies) {
         <div class="movie-info">
           <h3>${title}</h3>
           <span class="${getOverviewRating(
-            vote_average
-          )}">${vote_average}</span>
+      vote_average
+    )}">${vote_average}</span>
         </div>
         <div class="overview">
           <h3 class="overview">
@@ -111,8 +111,8 @@ function showMovies(movies) {
 
     main.appendChild(createEL);
   });
-  
- 
+
+
 
 }
 
@@ -126,12 +126,11 @@ function getOverviewRating(rating) {
   }
 }
 
-function getAdultStatus(adult){
-  if(adult){
+function getAdultStatus(adult) {
+  if (adult) {
     return '18+';
   }
-  else
-  {
+  else {
     return '14+'
   }
 }
